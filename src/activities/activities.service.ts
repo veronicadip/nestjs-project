@@ -1,44 +1,62 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Activity } from "./activity.model";
-import { v4 as uuidv4 } from 'uuid';
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
 
 
 @Injectable()
 export class ActivitiesService {
-    private activities: Activity[] = [];
+    ç
 
-    private findActivity(id: string): [Activity, number] {
-        const activityIndex = this.activities.findIndex(activity => activity.id === id);
-        const activity = this.activities[activityIndex];
+    constructor(@InjectModel("Activity") private readonly activityModel: Model<Activity>) { }
+
+    private async findActivity(id: string): Promise<Activity> {
+        let activity;
+        try {
+            activity = await this.activityModel.findById(id).exec();
+        } catch (error) {
+            throw new NotFoundException('Could not find activity.');
+        }
         if (!activity) {
             throw new NotFoundException('Could not find activity.');
         }
-        return [activity, activityIndex];
+        return activity;
     }
 
-    addActivity(place: string, price: { number: number, currency: string }) {
-        const activityID = uuidv4();
-        const newActivity = new Activity(activityID, place, price);
-        this.activities.push(newActivity);
-        return activityID;
+    async addActivity(place: string, price: { number: number, currency: string }) {
+        const newActivity = new this.activityModel({ place, price });
+        const result = await newActivity.save();
+        return result.id as string;
     }
 
-    getAllActivities() {
-        return [...this.activities];
+    async getAllActivities() {
+        const activities = await this.activityModel.find().exec();
+        return activities.map((act) => ({ id: act.id, place: act.place, price: { number: act.price.number, currency: act.price.currency } })) as Activity[];
     }
 
-    getActivity(activityID: string) {
-        const activity = this.findActivity(activityID)[0];
-        return { ...activity }
+    async getActivity(activityID: string) {
+        const activity = await this.findActivity(activityID);
+        return { id: activity.id, place: activity.place, price: { number: activity.price.number, currency: activity.price.currency } };
     }
 
-    updateActivity(activityID: string, place: string, price: { number: number, currency: string }) {
-        const [activity, index] = this.findActivity(activityID);
-        this.activities[index] = { ...activity, ...(place && { place }), ...(price.number && price.currency && { price }) };
+    async updateActivity(activityID: string, place: string, price: { number: number, currency: string }) {
+        const updatedActivity = await this.findActivity(activityID);
+        if (place) {
+            updatedActivity.place = place;
+        }
+        if (price.number) {
+            updatedActivity.price.number = price.number;
+        }
+        if (price.currency) {
+            updatedActivity.price.currency = price.currency;
+        }
+        updatedActivity.save();
     }
 
-    deleteActivity(activityID: string) {
-        const [_, index] = this.findActivity(activityID);
-        this.activities.splice(index, 1);
+    async deleteActivity(activityID: string) {
+        const result = await this.activityModel.deleteOne({ _id: activityID }).exec();
+        if (result.deletedCount === 0) {
+            throw new NotFoundException('Could not find activity.');
+        }
     }
 }

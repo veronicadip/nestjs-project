@@ -5,14 +5,15 @@ import { ActivitiesService } from "./activities.service";
 export class ActivitiesController {
     constructor(private readonly activitiesService: ActivitiesService) { }
     @Post()
-    addActivity(@Body() reqBody: { place: string, price: { number: number, currency: string } }) {
-        const generatedID = this.activitiesService.addActivity(reqBody.place, reqBody.price);
+    async addActivity(@Body() reqBody: { place: string, price: { number: number, currency: string } }) {
+        const generatedID = await this.activitiesService.addActivity(reqBody.place, reqBody.price);
         return { id: generatedID };
     }
 
     @Get()
-    getAllActivities() {
-        return { activities: this.activitiesService.getAllActivities() };
+    async getAllActivities() {
+        const result = { activities: await this.activitiesService.getAllActivities() };
+        return result;
     }
 
     @Get(':id')
@@ -21,14 +22,14 @@ export class ActivitiesController {
     }
 
     @Patch(':id')
-    updateActivity(@Param('id') activityID: string, @Body() reqBody: { place: string, price: { number: number, currency: string } }) {
-        this.activitiesService.updateActivity(activityID, reqBody.place, reqBody.price);
+    async updateActivity(@Param('id') activityID: string, @Body() reqBody: { place: string, price: { number: number, currency: string } }) {
+        await this.activitiesService.updateActivity(activityID, reqBody.place, reqBody.price);
         return "Activity updated successfully";
     }
 
     @Delete(':id')
-    removeActivity(@Param('id') activityID: string) {
-        this.activitiesService.deleteActivity(activityID);
+    async removeActivity(@Param('id') activityID: string) {
+        await this.activitiesService.deleteActivity(activityID);
         return "Activity deleted successfully";
     }
 }
