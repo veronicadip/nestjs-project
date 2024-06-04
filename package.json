@@ -27,6 +27,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.2",
     "dotenv": "^16.4.5",
+    "firebase": "^10.12.2",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.1",
     "reflect-metadata": "^0.2.0",

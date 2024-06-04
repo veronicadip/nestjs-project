@@ -12,8 +12,8 @@ export class AuthController {
         return this.service.signup()
     }
 
-    @Post('signin')
-    signin() {
-        return this.service.signin()
-    }
+    // @Post('google')
+    // async signWithGoogle() {
+    //     return this.service.signWithGoogle()
+    // }
 }
