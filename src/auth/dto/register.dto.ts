@@ -3,9 +3,6 @@ import { IsEmail, IsOptional, IsString, MinLength } from "class-validator";
 
 export class RegisterDto {
 
-    @IsString()
-    token: string;
-
     @IsEmail()
     email: string;
 

@@ -14,8 +14,8 @@ export class UsersService {
     return createdUser.save();
   }
 
-  async findOneByToken(token: string): Promise<User> {
-    const user = await this.userModel.findOne({ token })
+  async findOneByEmail(email: string): Promise<User> {
+    const user = await this.userModel.findOne({ email })
     return user;
   }
 

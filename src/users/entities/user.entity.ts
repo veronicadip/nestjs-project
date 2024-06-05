@@ -11,9 +11,6 @@ export class User {
     id: Types.ObjectId
 
     @Prop({ required: true, unique: true })
-    token: string;
-
-    @Prop({ required: true, unique: true })
     email: string;
 
     @Prop({ required: true })
