@@ -6,8 +6,6 @@ import { Model } from "mongoose";
 
 @Injectable()
 export class ActivitiesService {
-    ç
-
     constructor(@InjectModel("Activity") private readonly activityModel: Model<Activity>) { }
 
     private async findActivity(id: string): Promise<Activity> {
