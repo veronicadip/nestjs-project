@@ -16,8 +16,32 @@ export class User {
     @Prop({ required: true })
     password: string;
 
+    @Prop({ required: true })
+    first_name: string;
+
+    @Prop({ required: true })
+    last_name: string;
+
     @Prop({ required: false })
-    name?: string;
+    biography?: string;
+
+    @Prop({ required: false })
+    location?: {
+        province: string;
+        city: string;
+    };
+
+    @Prop({ required: false })
+    user_photos?: {
+        avatar?: string;
+        cover?: string;
+    }
+
+    @Prop({ required: true, default: { following: 0, followers: 0 } })
+    follows: {
+        following: number;
+        followers: number;
+    };
 
     @Prop({ default: ["user"] })
     role: string[];
