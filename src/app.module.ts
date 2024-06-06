@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { ActivitiesModule } from './activities/activities.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 
 @Module({
@@ -11,12 +12,13 @@ import { UsersModule } from './users/users.module';
     isGlobal: true,
   }),
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, FavoritesModule],
       useFactory: async (configService: ConfigService) => ({
         uri: `mongodb+srv://${configService.get('MONGODB_USERNAME')}:${configService.get('MONGODB_PASSWORD')}@cluster0.9ambpnq.mongodb.net/?retryWrites=true&w=majority&appName=${configService.get('MONGODB_DATABASE_NAME')}`,
       }),
       inject: [ConfigService],
     }),
-    UsersModule],
+    UsersModule,
+    FavoritesModule],
 })
 export class AppModule { }
