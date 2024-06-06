@@ -7,8 +7,8 @@ export type UserDocument = User & Document;
 @Schema()
 export class User {
 
-    @Prop({ type: SchemaTypes.ObjectId, auto: true })
-    id: Types.ObjectId
+    // @Prop({ type: SchemaTypes.ObjectId, auto: true })
+    // id: Types.ObjectId
 
     @Prop({ required: true, unique: true })
     email: string;

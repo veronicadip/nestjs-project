@@ -19,7 +19,7 @@ export class FavoritesController {
 
     @Get(':userId')
     async getFavorites(@Param('userId') userId: string) {
-        return await this.favoritesService.getAllFavorites(userId);
+        return await this.favoritesService.getFavoritesByUser(userId);
     };
 
 };
